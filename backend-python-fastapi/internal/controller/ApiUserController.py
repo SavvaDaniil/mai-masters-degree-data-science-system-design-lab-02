@@ -34,6 +34,7 @@ def search_by_username(request: Request, response: Response, userSearchByUsernam
 
 @routerUser.api_route('/search', response_model=BaseResponse, methods=["POST"])
 def search(request: Request, response: Response, userSearchDTO: UserSearchDTO):
+    """Поиск пользователя по запросу, в том числе по фамилии и имени"""
     user_id: int = userMiddleware.get_current_user_id(request=request)
     if user_id == 0:
         response.status_code = 403
@@ -67,6 +68,7 @@ def add(request: Request, response: Response, userRegistrationDTO: UserRegistrat
 
 @routerUser.api_route(path='/login', response_model=BaseResponse, methods=["POST"])
 def login(request: Request, response: Response, userLoginDTO: UserLoginDTO):
+    """Аутентификация и выдача JWT"""
     try:
         access_token: str = userFacade.login(response=response, userLoginDTO=userLoginDTO)
         return BaseResponse(is_auth=True, access_token=access_token)
