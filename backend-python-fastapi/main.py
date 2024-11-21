@@ -6,7 +6,6 @@ from internal.controller.ApiUserController import routerUser
 from internal.controller.ApiEmailController import routerEmail
 from internal.controller.ApiEmailFolderController import routerEmailFolder
 from internal.facade.UserFacade import UserFacade
-from internal.Entities import User
 from internal.data.ApplicationDbContext import ApplicationDbContext
 
 

@@ -16,7 +16,7 @@ class UserMiddleware():
     def __init__(self):
         pass
     
-    def get_current_user_id(self, request: Request, is_raise_exception: bool = False) -> int:
+    def get_current_user_id(self, request: Request, is_raise_exception: bool = False) -> str:
         """Получение user_id из JWT"""
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -33,7 +33,8 @@ class UserMiddleware():
             return 0
         token = token.replace("Bearer ", "")
 
-        user_id: int = 0
+        #user_id: int = 0
+        user_id_str: str = None
         try:
             payload = jwt.decode(token, base64.b64encode(self.SECRET_KEY.encode()), algorithms=[self.ALGORITHM])
             user_id_str: str = payload.get("sub")
@@ -42,13 +43,13 @@ class UserMiddleware():
                     raise credentials_exception
                 else:
                     return 0
-            user_id = int(user_id_str)
+            #user_id = int(user_id_str)
         except JWTError:
             if is_raise_exception:
                 raise credentials_exception
             else:
                 return 0
-        return user_id
+        return user_id_str
 
     def create_access_token(self, response: Response, user_id: int) -> str:
         to_encode = {"sub": str(user_id)}

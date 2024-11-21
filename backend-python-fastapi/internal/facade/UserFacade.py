@@ -6,7 +6,7 @@ from typing import List
 
 from internal.dto.UserDTO import UserRegistrationDTO, UserLoginDTO, UserForgetDTO, UserSearchByUsernameDTO, UserSearchDTO
 from internal.repository.UserRepository import UserRepository
-from internal.Entities import User
+from internal.entity.User import User
 from internal.middleware.UserMiddleware import UserMiddleware
 from internal.util.RandomUtil import RandomUtil
 from internal.custom_exception.UserCustomException import UserLoginFailedException, UsernameAlreadyExistsException, UserNotFoundException
@@ -29,7 +29,7 @@ class UserFacade:
             raise UserNotFoundException()
         
         return UserProfileViewModel(
-            id=user.id,
+            id=str(user._id),
             username=user.username,
             is_active=True if user.is_active == 1 else False,
             lastname=user.lastname,
@@ -49,7 +49,7 @@ class UserFacade:
             for user in users:
                 userSearchMicroViewModels.append(
                     UserSearchMicroViewModel(
-                        id=user.id,
+                        id=str(user._id),
                         username=user.username,
                         lastname=user.lastname,
                         firstname=user.firstname
@@ -79,9 +79,9 @@ class UserFacade:
         user.password = self.pwd_context.hash(userRegistrationDTO.password)
         user.is_active = 1
         user.date_of_add = datetime.now()
-        self.userRepository.add(obj=user)
+        self.userRepository.add(user=user)
 
-        return user.id
+        return user._id
 
     def login(self, response:Response, userLoginDTO: UserLoginDTO) -> str:
         
@@ -90,7 +90,7 @@ class UserFacade:
             raise UserLoginFailedException()
 
         if self.pwd_context.verify(userLoginDTO.password, user.password):
-            return self.userMiddleware.create_access_token(response, user.id)
+            return self.userMiddleware.create_access_token(response, user._id)
 
         raise UserLoginFailedException()
     
@@ -116,7 +116,7 @@ class UserFacade:
             #    code=code
             #)
 
-            return BaseResponse(forget_id=user.id)
+            return BaseResponse(forget_id=user._id)
         
         elif userForgetDTO.step == 1:
             user: User = self.userRepository.find_by_id(id=userForgetDTO.forget_id)

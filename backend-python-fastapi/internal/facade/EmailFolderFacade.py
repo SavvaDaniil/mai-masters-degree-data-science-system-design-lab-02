@@ -2,7 +2,8 @@
 from datetime import datetime
 from typing import List
 
-from internal.Entities import Email, User, EmailFolder, ConnectionEmailToEmailFolder
+from internal.Entities import Email, EmailFolder, ConnectionEmailToEmailFolder
+from internal.entity.User import User
 from internal.dto.EmailFolderDTO import EmailFolderNewDTO
 from internal.dto.ConnectionEmailToEmailFolder import ConnectionEmailToEmailFolderNewDTO
 from internal.repository.EmailRepository import EmailRepository
@@ -24,20 +25,20 @@ class EmailFolderFacade:
         self.emailFolderRepository: EmailFolderRepository = EmailFolderRepository()
         self.connectionEmailToEmailFolderRepository: ConnectionEmailToEmailFolderRepository = ConnectionEmailToEmailFolderRepository()
 
-    def add_by_user(self, user_id: int, emailFolderNewDTO: EmailFolderNewDTO) -> None:
+    def add_by_user(self, user_id: str, emailFolderNewDTO: EmailFolderNewDTO) -> None:
         """Создание нового почтовой папки пользователем"""
         user: User = self.userRepository.find_by_id(id=user_id)
         if user is None:
             raise UserNotFoundException()
         
         emailFolder: EmailFolder = EmailFolder()
-        emailFolder.user = user
+        emailFolder.user_id = user_id
         emailFolder.title = emailFolderNewDTO.title
         emailFolder.date_of_add = datetime.now()
 
         self.emailFolderRepository.add(obj=emailFolder)
 
-    def add_email_to_email_folder(self, user_id: int, connectionEmailToEmailFolderNewDTO: ConnectionEmailToEmailFolderNewDTO) -> None:
+    def add_email_to_email_folder(self, user_id: str, connectionEmailToEmailFolderNewDTO: ConnectionEmailToEmailFolderNewDTO) -> None:
         """Добавления письма в папку"""
         user: User = self.userRepository.find_by_id(id=user_id)
         if user is None:
@@ -71,7 +72,7 @@ class EmailFolderFacade:
         self.connectionEmailToEmailFolderRepository.add(obj=connectionEmailToEmailFolder)
 
     
-    def get_list_by_user(self, user_id: int) -> List[EmailFolderPreviewViewModel]:
+    def get_list_by_user(self, user_id: str) -> List[EmailFolderPreviewViewModel]:
         """Получение перечня всех папок пользователем"""
         user: User = self.userRepository.find_by_id(id=user_id)
         if user is None:
@@ -91,7 +92,7 @@ class EmailFolderFacade:
         
         return emailFolderPreviewViewModels
     
-    def email_lite_list_by_email_folder_id(self, user_id: int, email_folder_id: int) -> List[EmailLiteViewModel]:
+    def email_lite_list_by_email_folder_id(self, user_id: str, email_folder_id: int) -> List[EmailLiteViewModel]:
         """Получение всех писем в папке пользователем"""
         user: User = self.userRepository.find_by_id(id=user_id)
         if user is None:
@@ -115,7 +116,7 @@ class EmailFolderFacade:
         
 
 
-    def delete_by_id_by_user(self, user_id: int, email_folder_id: int) -> None:
+    def delete_by_id_by_user(self, user_id: str, email_folder_id: int) -> None:
         """Удаление почтовой папки пользователем"""
         user: User = self.userRepository.find_by_id(id=user_id)
         if user is None:
@@ -125,7 +126,7 @@ class EmailFolderFacade:
         if emailFolder is None:
             raise EmailFolderNotFoundException()
     
-        if emailFolder.user_id != user.id:
+        if emailFolder.user_id != user._id:
             raise EmailFolderUserNotOwnedException()
         
         self.emailFolderRepository.delete(obj=emailFolder)

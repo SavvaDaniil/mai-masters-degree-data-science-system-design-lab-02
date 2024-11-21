@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime
 
-from internal.Entities import Email, User
+from internal.Entities import Email
+from internal.entity.User import User
 from internal.dto.EmailDTO import EmailNewDTO
 from internal.repository.UserRepository import UserRepository
 from internal.repository.EmailRepository import EmailRepository
@@ -24,7 +25,7 @@ class EmailFacade:
         return emailFactory.create_lite_viewmodel(email=email)
 
 
-    def add(self, user_from_id: int, emailNewDTO: EmailNewDTO) -> None:
+    def add(self, user_from_id: str, emailNewDTO: EmailNewDTO) -> None:
         userFrom: User = self.userRepository.find_by_id(id=user_from_id)
         if userFrom is None:
             raise EmailUserFromNotFoundException()
@@ -36,7 +37,7 @@ class EmailFacade:
         email: Email = Email()
         email.code = uuid.uuid4()
         email.user_from_id = user_from_id
-        email.user_to_id = userTo.id
+        email.user_to_id = str(userTo._id)
         email.subject = emailNewDTO.subject
         email.text_message = emailNewDTO.text_message
         email.date_of_add = datetime.now()

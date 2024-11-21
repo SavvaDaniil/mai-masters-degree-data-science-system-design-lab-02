@@ -20,8 +20,8 @@ emailFacade: EmailFacade = EmailFacade()
 def add(request: Request, response: Response, emailNewDTO: EmailNewDTO):
     """Создание нового письма"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -42,8 +42,8 @@ def add(request: Request, response: Response, emailNewDTO: EmailNewDTO):
 def get_by_code(request: Request, response: Response, email_code: str):
     """Получение письма по коду"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     

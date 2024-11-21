@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Union
 
 class UserSearchMicroViewModel(BaseModel):
-    id: int
+    id: str
     username: Union[str, None]
     lastname: Union[str, None]
     firstname: Union[str, None]

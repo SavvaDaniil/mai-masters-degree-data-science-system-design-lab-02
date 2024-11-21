@@ -24,8 +24,8 @@ emailFolderFacade: EmailFolderFacade = EmailFolderFacade()
 def add_by_user(request: Request, response: Response, emailFolderNewDTO: EmailFolderNewDTO):
     """Создание нового почтовой папки пользователем"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -44,8 +44,8 @@ def add_by_user(request: Request, response: Response, emailFolderNewDTO: EmailFo
 def add_email_to_email_folder(request: Request, response: Response, connectionEmailToEmailFolderNewDTO: ConnectionEmailToEmailFolderNewDTO):
     """Добавления письма в папку"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -64,8 +64,8 @@ def add_email_to_email_folder(request: Request, response: Response, connectionEm
 def list_of_emails(request: Request, response: Response, email_folder_id_str: str):
     """Получение всех писем в папке"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -86,8 +86,8 @@ def list_of_emails(request: Request, response: Response, email_folder_id_str: st
 def get_list_by_user(request: Request, response: Response):
     """Получение перечня всех папок пользователя"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -107,8 +107,8 @@ def get_list_by_user(request: Request, response: Response):
 def delete_by_id_by_user(request: Request, response: Response, email_folder_id_str: str):
     """Удаление почтовой папки пользователем"""
 
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
 

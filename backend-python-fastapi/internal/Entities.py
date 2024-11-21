@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+"""
 class User(Base):
     __tablename__ = "user"
     
@@ -24,6 +25,7 @@ class User(Base):
     #emails_to = relationship("Email", back_populates="user_to")
 
     email_folders = relationship("EmailFolder", back_populates="user")
+"""
 
 
 class Email(Base):
@@ -33,10 +35,12 @@ class Email(Base):
 
     code = Column("code", String(36))
 
-    user_from_id = Column("user_from_id", Integer, ForeignKey("user.id"))
+    user_from_id = Column("user_from_id", String(128))
+    #user_from_id = Column("user_from_id", Integer, ForeignKey("user.id"))
     #user_from = relationship("User", back_populates="emails_from", lazy="joined", foreign_keys="Email.user_from_id")
 
-    user_to_id = Column("user_to_id", Integer, ForeignKey("user.id"))
+    user_to_id = Column("user_to_id", String(128))
+    #user_to_id = Column("user_to_id", Integer, ForeignKey("user.id"))
     #user_to = relationship("User", back_populates="emails_to", lazy="joined", foreign_keys="Email.user_to_id")
 
     subject = Column("subject", String(1024))
@@ -53,8 +57,9 @@ class EmailFolder(Base):
     
     id = Column("id", Integer, primary_key = True, index=True, unique = True)
 
-    user_id = Column("user_id", Integer, ForeignKey("user.id"))
-    user = relationship("User", back_populates="email_folders", lazy="joined")
+    user_id = Column("user_id", String(128))
+    #user_id = Column("user_id", Integer, ForeignKey("user.id"))
+    #user = relationship("User", back_populates="email_folders", lazy="joined")
 
     title = Column("title", String(1024))
     

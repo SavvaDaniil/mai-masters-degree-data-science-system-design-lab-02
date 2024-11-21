@@ -17,8 +17,8 @@ userFacade: UserFacade = UserFacade()
 @routerUser.api_route('/search/username', response_model=BaseResponse, methods=["POST"])
 def search_by_username(request: Request, response: Response, userSearchByUsernameDTO: UserSearchByUsernameDTO):
     """Поиск пользователя по логину"""
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     
@@ -35,8 +35,8 @@ def search_by_username(request: Request, response: Response, userSearchByUsernam
 @routerUser.api_route('/search', response_model=BaseResponse, methods=["POST"])
 def search(request: Request, response: Response, userSearchDTO: UserSearchDTO):
     """Поиск пользователя по запросу, в том числе по фамилии и имени"""
-    user_id: int = userMiddleware.get_current_user_id(request=request)
-    if user_id == 0:
+    user_id: str = userMiddleware.get_current_user_id(request=request)
+    if user_id is None: #== 0:
         response.status_code = 403
         return BaseResponse(error="not_auth")
     

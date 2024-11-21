@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class EmailNewDTO(BaseModel):
-    user_to_id: int
+    user_to_id: str
     subject: str
     text_message: str
 
