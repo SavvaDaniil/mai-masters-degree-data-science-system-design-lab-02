@@ -135,11 +135,13 @@ class UserRepository():
                 {"lastname" : {'$regex' : "|".join(query_strs)}},
                 {"firstname" : {'$regex' : "|".join(query_strs)}}
             ]}).skip(skip).limit(take)
+        else:
+            query_results = collection.find().skip(skip).limit(take)
         userFactory: UserFactory = UserFactory()
         users: List[User] = []
         for query_result in query_results:
             users.append(userFactory.create_from_row(query_result))
-            
+
         dbc_client.close()
 
         return users
