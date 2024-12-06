@@ -1,6 +1,10 @@
 
 from internal.abstracts.NotCriticalExceptionAbstract import NotCriticalExceptionAbstract
 
+class EmailCodeEmptyException(NotCriticalExceptionAbstract):
+    def __init__(self):
+        super().__init__("email code is empty")
+
 class EmailNotFoundException(NotCriticalExceptionAbstract):
     def __init__(self):
         super().__init__("email not found")

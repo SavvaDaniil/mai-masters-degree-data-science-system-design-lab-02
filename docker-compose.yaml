@@ -35,8 +35,18 @@ services:
       - '27017:27017'
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/mai_master_degree_system_analysis_lab --quiet
+
+  redis-cache:
+    container_name: redis-cache
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning 
+    networks:
+      - my_network
   
-  backend-python-fastapi-fastapi:
+  backend-python-fastapi:
     build:
       context: ./backend-python-fastapi
     container_name: backend-python-fastapi
@@ -47,9 +57,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./volumes/backend-python-fastapi:/app/logs.txt
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db/mai_master_degree_systems_analysis
       - DATABASE_MONGO_URL=mongodb://mongodb:27017/
+      - DATABASE_REDIS_URL=redis://redis-cache:6379/0
   
   
   
