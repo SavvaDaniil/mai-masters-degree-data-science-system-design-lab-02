@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from internal.controller.ApiUserController import routerUser
 from internal.controller.ApiEmailController import routerEmail
 from internal.controller.ApiEmailFolderController import routerEmailFolder
+from internal.controller.ApiMessageController import routerMessage
 from internal.facade.UserFacade import UserFacade
 from internal.data.ApplicationDbContext import ApplicationDbContext
 
@@ -28,6 +29,7 @@ app.add_middleware(
 app.include_router(routerUser, prefix="/api/user")
 app.include_router(routerEmail, prefix="/api/email")
 app.include_router(routerEmailFolder, prefix="/api/email_folder")
+app.include_router(routerMessage, prefix="/api/message")
 
 @app.get("/api")
 def index():

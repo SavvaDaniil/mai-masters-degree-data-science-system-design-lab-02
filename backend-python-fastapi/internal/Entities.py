@@ -82,3 +82,11 @@ class ConnectionEmailToEmailFolder(Base):
     date_of_add = Column("date_of_add", DateTime)
 
 
+# class Message(Base):
+#     __tablename__ = "message"
+    
+#     id = Column("id", Integer, primary_key = True, index=True, unique = True)
+#     content_of_message = Column("content_of_message", Text)
+#     date_of_add = Column("date_of_add", DateTime)
+
+
